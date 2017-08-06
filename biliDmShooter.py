@@ -133,21 +133,27 @@ if __name__ == '__main__':
     #input cookie
     webCookie = input("please input your cookie:")
     dmData.getCookie(webCookie)
-
-    assFileNmae = input("please input your ass file name:" )
-
     dmShooter = dmShooter(dmData)
 
-    file_object = open(assFileNmae,'r+',encoding='UTF-8')
-    assLines = file_object.readlines()
-    for lintItem in assLines:
-        if lintItem.count('Dialogue') == 1:
-            time.sleep(5.0+random.random())
-            currentLine = (lintItem.split('\n')[0]).split(",")
-            timeMarkList = currentLine[1].split(':')
-            timeMark = float(timeMarkList[0])*3600+float(timeMarkList[1])*60+float(timeMarkList[2])
-           # print(currentLine[1],'%6f'% timeMark, currentLine[9])
-            postText = dmShooter.postDm('%6f'% timeMark, currentLine[9])
-            print(postText)
-        else:
-            continue
+    assFileNmae = input("please input your ass file name:" )
+    if assFileNmae.endswith('.ass'):
+        try:
+            file_object = open(assFileNmae, 'r', encoding='UTF-8')
+        except IOError:
+            print("exit because the file don't exist")
+            exit()
+        assLines = file_object.readlines()
+        for lintItem in assLines:
+            if lintItem.count('Dialogue') == 1:
+                time.sleep(5.0 + random.random())
+                currentLine = (lintItem.split('\n')[0]).split(",")
+                timeMarkList = currentLine[1].split(':')
+                timeMark = float(timeMarkList[0]) * 3600 + float(timeMarkList[1]) * 60 + float(timeMarkList[2])
+                # print(currentLine[1],'%6f'% timeMark, currentLine[9])
+                postText = dmShooter.postDm('%6f' % timeMark, currentLine[9])
+                print(postText)
+            else:
+                continue
+        file_object.close()
+    else:
+        print("this file format is not support")
