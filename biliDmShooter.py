@@ -14,8 +14,10 @@ class postDmData:
 
     def getVideoId(self,html):
         htmlList = html.split("\n")
+        linenum = 0
         for lineItem in htmlList:
-            if ('cid' and 'aid' in lineItem):
+            if ('cid' in lineItem) and ('aid' in lineItem):
+                linenum += 1
                 pattenStr = r"cid=(\d+)&aid=(\d+)&pre"
                 patten = re.compile(pattenStr)
                 idList = patten.findall(lineItem)[0]
@@ -105,9 +107,21 @@ if __name__ == '__main__':
     #input website
     #biliLink = "https://www.bilibili.com/video/av12802603/"
     biliLink = input("please input your bilibili video link:")
-    htm =requests.get(biliLink)
+
+    htm = ""
+    try:
+        htm =requests.get(biliLink)
+    except requests.exceptions.ConnectionError:
+        print("exit because of network connectionError")
+        exit(1)
+    except requests.exceptions.MissingSchema:
+        print("exit because of url entry error")
+        exit(1)
+
+
+
     if(dmData.getVideoId(htm.text) == False):
-        print("exit because of network fault")
+        print("exit because of web page fault")
         exit(1)
 
     #input cookie
