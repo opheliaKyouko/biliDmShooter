@@ -31,18 +31,22 @@ class postDmData:
 
     def getCookie(self,webCookie):
         self.cookie = webCookie
+
         pattenCsrfStr = r"bili_jct=(.+?);"
-        self.csrf=re.findall(pattenCsrfStr, webCookie)[0]
+        findCsrfList =  re.findall(pattenCsrfStr, webCookie)
 
         pattenUidStr = r"DedeUserID=(.+?);"
-        self.uid = str(re.findall(pattenUidStr, webCookie)[0])
+        findUidList = re.findall(pattenUidStr, webCookie)
 
-        if(self.uid!='' and self.csrf!=''):
-            print("get uid = %s,and token = %s"%(self.uid,self.csrf))
+        if len(findCsrfList) != 0 and len(findUidList):
+            self.csrf = findCsrfList[0]
+            self.uid = findUidList[0]
+            print("get uid = %s,and token = %s" % (self.uid, self.csrf))
             return True
         else:
             print("get user data fail")
-        pass
+            return False
+
 
 class dmShooter:
     postLink = "https://interface.bilibili.com/dmpost?cid=21044350&aid=12802603&pid=1&ct=1"
@@ -70,7 +74,6 @@ class dmShooter:
         'message': '23333',
         'playTime': '1636.963084',
         'cid': '21044350',
-        # 'cid': '8217915',
         'date': '2017-08-01 20:48:56',
         'csrf': '9f179a962285670f35d1c2392aa2d330'
     }
@@ -111,6 +114,9 @@ if __name__ == '__main__':
     htm = ""
     try:
         htm =requests.get(biliLink)
+    except requests.exceptions.SSLError:
+        print("exit because of SSL error")
+        exit(1)
     except requests.exceptions.ConnectionError:
         print("exit because of network connectionError")
         exit(1)
