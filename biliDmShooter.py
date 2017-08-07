@@ -96,7 +96,7 @@ class dmShooter:
         self.params['csrf'] = self.postDmData.csrf
         self.params['cid'] = self.postDmData.cid
         self.heads['Cookie'] = self.postDmData.cookie
-        rndNum = random.randint(1501597969253783, 1501617969263783)
+        rndNum = random.randint(1502109879020920, 1503617969263783)
         self.params['rnd'] = str(rndNum)
 
         print (str(sendDate),videoTime,str(rndNum),dmText)
@@ -169,7 +169,6 @@ if __name__ == '__main__':
             if(re.match(pattenStr, lintItem)):
                 time.sleep(5.0 + random.random())
                 dataList = re.findall(pattenStr, lintItem)
-                print(dataList[0][0],dataList[0][1],dataList[0][2],dataList[0][3])
                 timeMark = float(str(dataList[0][0])) * 60 + float(str(dataList[0][1])) + float(str(dataList[0][2])) / 100
                 postText = dmShooter.postDm('%6f' % timeMark, dataList[0][3])
                 print(postText)
