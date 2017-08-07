@@ -39,7 +39,7 @@ class postDmData:
         pattenUidStr = r"DedeUserID=(.+?);"
         findUidList = re.findall(pattenUidStr, webCookie)
 
-        if len(findCsrfList) != 0 and len(findUidList):
+        if len(findCsrfList) != 0 and len(findUidList) != 0:
             self.csrf = findCsrfList[0]
             self.uid = findUidList[0]
             print("get uid = %s,and token = %s" % (self.uid, self.csrf))
@@ -136,10 +136,10 @@ if __name__ == '__main__':
     dmData.getCookie(webCookie)
     dmShooter = dmShooter(dmData)
 
-    assFileNmae = input("please input your ass file name:" )
-    if assFileNmae.endswith('.ass'):
+    fileNmae = input("please input your lyric file(ass or lrc file) name:" )
+    if fileNmae.endswith('.ass'):
         try:
-            file_object = open(assFileNmae, 'r', encoding='UTF-8')
+            file_object = open(fileNmae, 'r', encoding='UTF-8')
         except IOError:
             print("exit because the file don't exist")
             exit()
@@ -156,5 +156,31 @@ if __name__ == '__main__':
             else:
                 continue
         file_object.close()
+    elif fileNmae.endswith('.lrc'):
+        try:
+            file_object = open(fileNmae, 'r', encoding='UTF-8')
+        except IOError:
+            print("exit because the file don't exist")
+            exit()
+        lrcLines = file_object.readlines()
+        for lintItem in lrcLines:
+            lintItem = lintItem.strip('\n')
+            pattenStr = r"\[(\d+):(\d+)\.(\d+)\](.+)"
+            if(re.match(pattenStr, lintItem)):
+                time.sleep(5.0 + random.random())
+                dataList = re.findall(pattenStr, lintItem)
+                print(dataList[0][0],dataList[0][1],dataList[0][2],dataList[0][3])
+                timeMark = float(str(dataList[0][0])) * 60 + float(str(dataList[0][1])) + float(str(dataList[0][2])) / 100
+                postText = dmShooter.postDm('%6f' % timeMark, dataList[0][3])
+                print(postText)
+                pass
+            else:
+                print("miss")
+                pass
+        else:
+            pass
+
     else:
         print("this file format is not support")
+
+""""""    """            """
