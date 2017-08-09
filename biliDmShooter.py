@@ -144,6 +144,7 @@ if __name__ == '__main__':
             print("exit because the file don't exist")
             exit()
         assLines = file_object.readlines()
+        file_object.close()
         for lintItem in assLines:
             if lintItem.count('Dialogue') == 1:
                 time.sleep(5.0 + random.random())
@@ -155,7 +156,6 @@ if __name__ == '__main__':
                 print(postText)
             else:
                 continue
-        file_object.close()
     elif fileNmae.endswith('.lrc'):
         try:
             file_object = open(fileNmae, 'r', encoding='UTF-8')
@@ -163,6 +163,7 @@ if __name__ == '__main__':
             print("exit because the file don't exist")
             exit()
         lrcLines = file_object.readlines()
+        file_object.close()
         for lintItem in lrcLines:
             lintItem = lintItem.strip('\n')
             pattenStr = r"\[(\d+):(\d+)\.(\d+)\](.+)"
@@ -181,5 +182,3 @@ if __name__ == '__main__':
 
     else:
         print("this file format is not support")
-
-""""""    """            """
